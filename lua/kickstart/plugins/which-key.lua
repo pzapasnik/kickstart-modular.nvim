@@ -32,7 +32,7 @@ return {
       }
       -- visual mode
       require('which-key').register({
-        ['<leader>h'] = { 'Git [H]unk' },
+        ['<leader>h'] = { '#which-key Git [H]unk' },
       }, { mode = 'v' })
     end,
   },

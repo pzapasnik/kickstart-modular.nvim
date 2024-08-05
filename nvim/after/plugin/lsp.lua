@@ -8,35 +8,8 @@ local lsp = require('lsp-zero').preset({
 
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-k>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-j>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<CR>'] = cmp.mapping.confirm({ select = true }),
-  ["<C-Space>"] = cmp.mapping.complete(),
-})
-
-cmp_mappings['<Tab>'] = nil
-cmp_mappings['<S-Tab>'] = nil
-cmp_mappings['<C-f>'] = nil
-
-
---lua-language-server config
-lsp.configure('lua_ls', {
-  settings = {
-    Lua = {
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = { 'vim' },
-      },
-    },
-  },
-})
-
 
 -- require("lsp_signature").setup({})
-
---htmx config
-lspconfig.htmx.setup {}
 
 --TypeScript
 -- Use project-local typescript installation if available, fallback to global install
@@ -65,25 +38,7 @@ lspconfig.volar.setup({
   end,
 })
 
---golang formaters and linters
-lspconfig.gopls.setup({
-  settings = {
-    gopls = {
-      gofumpt = true
-    }
-  }
-})
 
---elixir formaters and linters
-lspconfig.lexical.setup({
-  cmd = { "/Users/pawelzapasnik/.local/share/nvim/mason/bin/lexical", "server" },
-  root_dir = require("lspconfig.util").root_pattern({ ".git" }),
-})
-
-lsp.ensure_installed({
-  'tsserver',
-  'eslint',
-})
 
 
 lsp.set_preferences({
@@ -93,33 +48,6 @@ lsp.set_preferences({
 lsp.setup_nvim_cmp({
   mapping = cmp_mappings
 })
-
-lsp.on_attach(function(client, bufnr)
-  local opts = { buffer = bufnr, remap = false, desc = "#LSP" }
-
-  vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end,
-    { buffer = bufnr, remap = false, desc = "#LSP Go to definition" })
-  vim.keymap.set('n', 'gi', function() vim.lsp.buf.implementation() end,
-    { buffer = bufnr, remap = false, desc = "#LSP Go to implementation" })
-  vim.keymap.set("n", "<leader>lt", function() vim.lsp.buf.type_definition() end,
-    { buffer = bufnr, remap = false, desc = "#LSP Go to Type definition" })
-  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end,
-    { buffer = bufnr, remap = false, desc = "#LSP Show documentation / information" })
-  vim.keymap.set("n", "<leader>ls", function() vim.lsp.buf.workspace_symbol() end,
-    { buffer = bufnr, remap = false, desc = "#LSP Search for workspace symbols" })
-  vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end,
-    { buffer = bufnr, remap = false, desc = "#LSP Go to next diagnostic" })
-  vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end,
-    { buffer = bufnr, remap = false, desc = "#LSP Go to previouse diagnostic" })
-  vim.keymap.set("n", "<leader>lc", function() vim.lsp.buf.code_action() end,
-    { buffer = bufnr, remap = false, desc = "#LSP Execute code action" })
-  vim.keymap.set("n", "<leader>ln", function() vim.lsp.buf.rename() end,
-    { buffer = bufnr, remap = false, desc = "#LSP rename symbol and all references" })
-  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end,
-    { buffer = bufnr, remap = false, desc = "#LSP Show signature help" })
-  vim.keymap.set("n", "<leader>ll", ":LspRestart<CR>",
-    { buffer = bufnr, remap = false, desc = "#LSP restart" })
-end)
 
 
 vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]] --format on save

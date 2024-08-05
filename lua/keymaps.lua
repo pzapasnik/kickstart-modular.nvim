@@ -100,15 +100,6 @@ vim.api.nvim_set_keymap('n', '<leader>lw', ':!wsl -fix %<cr>',
 vim.keymap.set("i", "<C-c>", "<Esc>")
 vim.keymap.set("n", "Q", "<nop>", { desc = "Disable Q key mapping" })
 
--- source file
--- if turn on turn of telescope <leader><leader>
--- vim.keymap.set("n", "<leader><leader>", function() vim.cmd("so") end, { desc = "#vim Execute the 'so' command" })
-
-
--- dodane w plugins/conform
--- vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "#LSP format" })
-
-
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
