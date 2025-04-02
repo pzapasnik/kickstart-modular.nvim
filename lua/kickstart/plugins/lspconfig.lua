@@ -9,11 +9,11 @@ return {
 
       -- Useful status updates for .
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- `neodev` configures Lua  for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim',       opts = {} },
+      { 'folke/neodev.nvim', opts = {} },
     },
     config = function()
       -- Brief aside: **What is ?**
@@ -57,6 +57,10 @@ return {
             vim.keymap.set('n', keys, func, { buffer = event.buf, desc = '#LSP ' .. desc })
           end
 
+          -- Execute a code action, usually your cursor needs to be on top of an error
+          -- or a suggestion from your  for this to activate.
+          vim.keymap.set({ 'n', 'v' }, '<leader>lc', vim.lsp.buf.code_action, { buffer = event.buf, desc = '#LSP [C]ode [A]ction' })
+
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
@@ -85,10 +89,6 @@ return {
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
           map('<leader>ln', vim.lsp.buf.rename, '[R]e[n]ame')
-
-          -- Execute a code action, usually your cursor needs to be on top of an error
-          -- or a suggestion from your  for this to activate.
-          map('<leader>lc', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap.
@@ -167,31 +167,31 @@ return {
         gopls = {
           settings = {
             gopls = {
-              gofumpt = true
-            }
-          }
+              buildFlags = { '-tags=protoopaque' },
+              gofumpt = true,
+            },
+          },
         },
+
+        -- Go templ
+        templ = {},
 
         -- Python
         pyright = {
           settings = {
             python = {
               analysis = {
+                typeCheckingMode = 'off',
                 autoSearchPaths = true,
-                diagnosticMode = "openFilesOnly",
-                useLibraryCodeForTypes = true
-              }
-            }
-          }
+                diagnosticMode = 'openFilesOnly',
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
         },
-
 
         -- Elixir
-        lexical = {
-          filetypes = { "elixir", "eelixir", "heex" },
-          cmd = { "/Users/pawelzapasnik/.local/share/nvim-kickstart-modular/mason/bin/lexical", "server" },
-          root_dir = require("lspconfig.util").root_pattern({ ".git" }),
-        },
+        elixirls = {},
 
         -- Frontend
 
@@ -220,11 +220,11 @@ return {
         -- },
 
         eslint = {
-          filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue", "svelte", "astro" },
+          filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx', 'vue', 'svelte', 'astro' },
           on_attach = function(client, bufnr)
-            vim.api.nvim_create_autocmd("BufWritePre", {
+            vim.api.nvim_create_autocmd('BufWritePre', {
               buffer = bufnr,
-              command = "EslintFixAll",
+              command = 'EslintFixAll',
             })
           end,
         },
@@ -234,9 +234,6 @@ return {
 
         -- Vue 2
         vuels = {},
-
-
-
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --

@@ -24,7 +24,7 @@ vim.opt.breakindent = true
 
 -- Save undo history
 vim.opt.undofile = true
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
@@ -64,10 +64,13 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 
 -- Spelling
-vim.opt.spelllang = "en_gb,pl"
+vim.opt.spelllang = 'en_gb,pl'
 vim.opt.spell = true
 
 -- type ret in insert mode to complete the word with return
-vim.cmd('iabbrev ret return')
+vim.cmd 'iabbrev ret return'
+
+-- enable templ file type
+vim.filetype.add { extension = { templ = 'templ' } }
 
 -- vim: ts=2 sts=2 sw=2 et

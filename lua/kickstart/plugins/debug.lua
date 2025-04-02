@@ -30,7 +30,6 @@ return {
     local dap = require 'dap'
     local dapui = require 'dapui'
 
-
     require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
       -- reasonable debug configurations
@@ -54,13 +53,16 @@ return {
     vim.keymap.set('n', '<leader>bo', dap.step_over, { desc = '#Debug: Step Over' })
     vim.keymap.set('n', '<leader>bu', dap.step_out, { desc = '#Debug: Step Out' })
     vim.keymap.set('n', '<leader>bb', dap.toggle_breakpoint, { desc = '#Debug: Toggle Breakpoint' })
-    vim.keymap.set('n', '<Leader>bs', function() require('dap').disconnect() end, { desc = "#Debug disconnect" })
+    vim.keymap.set('n', '<Leader>bs', function()
+      require('dap').disconnect()
+    end, { desc = '#Debug disconnect' })
 
     vim.keymap.set('n', '<leader>bl', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
     end, { desc = '#Debug: Set Conditional Breakpoint' })
-    vim.keymap.set('n', '<leader>bt', function() require('dapui').toggle() end, { desc = "#Debug toggle dap ui" })
-
+    vim.keymap.set('n', '<leader>bt', function()
+      require('dapui').toggle()
+    end, { desc = '#Debug toggle dap ui' })
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
@@ -92,11 +94,11 @@ return {
     require('dap-go').setup {}
 
     -- lauch json setup
-    require('telescope').load_extension('dap')
+    require('telescope').load_extension 'dap'
 
     local function get_dap_launch_json(paths)
       for _, path in ipairs(paths) do
-        local f = io.open(path, "r")
+        local f = io.open(path, 'r')
         if f then
           f:close()
           return path
@@ -105,9 +107,9 @@ return {
       return 'launch.json'
     end
 
-    local dap_config_files = { '.debug/launch.json', '.vscode/launch.json', }
-    local vscode = require('dap.ext.vscode')
-    local json = require("plenary.json")
+    local dap_config_files = { '.debug/launch.json', '.vscode/launch.json' }
+    local vscode = require 'dap.ext.vscode'
+    local json = require 'plenary.json'
     vscode.json_decode = function(str)
       return vim.json.decode(json.json_strip_comments(str))
     end

@@ -28,7 +28,7 @@ return {
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
       { 'nvim-telescope/telescope-dap.nvim' },
     },
     config = function()
@@ -67,7 +67,7 @@ return {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
-          ['dap'] = {}
+          ['dap'] = {},
         },
       }
 
@@ -82,9 +82,9 @@ return {
       vim.keymap.set('n', '<leader>pk', builtin.keymaps, { desc = '#Telescope [S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = '#Telescope [S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ps', builtin.builtin, { desc = '#Telescope [S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>pu',
-        function() builtin.grep_string({ file_ignore_patterns = { "swaggerui/**" }, }) end,
-        { desc = '#Telescope [S]earch current [W]ord' })
+      vim.keymap.set('n', '<leader>pu', function()
+        builtin.grep_string { file_ignore_patterns = { 'swaggerui/**' } }
+      end, { desc = '#Telescope [S]earch current [W]ord' })
 
       vim.keymap.set('n', '<leader>pi', builtin.live_grep, { desc = '#Telescope [S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>ld', builtin.diagnostics, { desc = '#Telescope [S]earch [D]iagnostics' })
@@ -97,13 +97,15 @@ return {
         if not ok then
           builtin.find_files()
         end
-      end, { desc = "#telescope git files" })
+      end, { desc = '#telescope git files' })
 
       vim.keymap.set('n', '<leader>ps', function()
-        builtin.grep_string({ search = vim.fn.input("Grep > ") })
-      end, { desc = "#telescope grep in files" })
+        builtin.grep_string { search = vim.fn.input 'Grep > ' }
+      end, { desc = '#telescope grep in files' })
 
-      vim.keymap.set('n', '<leader>pg', builtin.git_status, { desc = "#telescope Git diff" })
+      vim.keymap.set('n', '<leader>pd', builtin.git_status, { desc = '#Telescope Git diff' })
+      vim.keymap.set('n', '<leader>pc', builtin.git_bcommits, { desc = '#Telescope Git list commits from current buffor' })
+      vim.keymap.set('n', '<leader>pb', builtin.git_branches, { desc = '#Telescope Git Branches, list branches and checksout' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
