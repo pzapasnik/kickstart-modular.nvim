@@ -93,7 +93,11 @@ return {
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '#Telescope [ ] Find existing buffers' })
 
       vim.keymap.set('n', '<C-p>', function()
-        local ok, _ = pcall(builtin.git_files)
+        local ok, _ = pcall(builtin.git_files, {
+          show_untracked = true,
+          file_ignore_patterns = { 'node_modules', '.git', '/swaggerui' },
+          use_git_root = false,
+        })
         if not ok then
           builtin.find_files()
         end

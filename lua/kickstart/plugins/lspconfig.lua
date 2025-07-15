@@ -162,6 +162,8 @@ return {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain  features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+
+      local util = require('lspconfig').util
       local servers = {
         -- Go
         gopls = {
@@ -169,6 +171,24 @@ return {
             gopls = {
               buildFlags = { '-tags=protoopaque' },
               gofumpt = true,
+            },
+          },
+        },
+
+        golangci_lint_ls = {
+          settings = {
+            init_options = {
+              cmd = { 'golangci-lint-langserver' },
+              filetypes = { 'go' },
+              -- root_dir = util.root_pattern('go.mod'),
+              command = {
+                'golangci-lint',
+                'run',
+                '--output.json.path',
+                'stdout',
+                '--show-stats=false',
+                '--issues-exit-code=1',
+              },
             },
           },
         },
@@ -277,6 +297,8 @@ return {
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        automatic_installation = true,
+        ensure_installed = ensure_installed,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}

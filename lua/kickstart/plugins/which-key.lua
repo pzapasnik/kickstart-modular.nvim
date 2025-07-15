@@ -14,7 +14,7 @@
 --  config = function() ... end
 
 return {
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -22,18 +22,27 @@ return {
 
       -- Document existing key chains
       require('which-key').register {
-        ['<leader>wc'] = { name = '#which-key [C]ode', _ = 'which_key_ignore' },
-        ['<leader>wd'] = { name = '#which-key [D]ocument', _ = 'which_key_ignore' },
-        ['<leader>wr'] = { name = '#which-key [R]ename', _ = 'which_key_ignore' },
-        ['<leader>ws'] = { name = '#which-key [S]earch', _ = 'which_key_ignore' },
-        ['<leader>wv'] = { name = '#which-key [W]orkspace', _ = 'which_key_ignore' },
-        ['<leader>wt'] = { name = '#which-key [T]oggle', _ = 'which_key_ignore' },
-        ['<leader>wh'] = { name = '#which-key Git [H]unk', _ = 'which_key_ignore' },
+        {
+          { '<leader>wc', group = '#which-key [C]ode' },
+          { '<leader>wc_', hidden = true },
+          { '<leader>wd', group = '#which-key [D]ocument' },
+          { '<leader>wd_', hidden = true },
+          { '<leader>wh', group = '#which-key Git [H]unk' },
+          { '<leader>wh_', hidden = true },
+          { '<leader>wr', group = '#which-key [R]ename' },
+          { '<leader>wr_', hidden = true },
+          { '<leader>ws', group = '#which-key [S]earch' },
+          { '<leader>ws_', hidden = true },
+          { '<leader>wt', group = '#which-key [T]oggle' },
+          { '<leader>wt_', hidden = true },
+          { '<leader>wv', group = '#which-key [W]orkspace' },
+          { '<leader>wv_', hidden = true },
+        },
       }
       -- visual mode
-      require('which-key').register({
-        ['<leader>h'] = { '#which-key Git [H]unk' },
-      }, { mode = 'v' })
+      require('which-key').register {
+        { '<leader>h', desc = '#which-key Git [H]unk', mode = 'v' },
+      }
     end,
   },
 }

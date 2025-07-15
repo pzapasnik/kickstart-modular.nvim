@@ -73,4 +73,12 @@ vim.cmd 'iabbrev ret return'
 -- enable templ file type
 vim.filetype.add { extension = { templ = 'templ' } }
 
+vim.diagnostic.config {
+  virtual_text = {
+    source = true,
+  },
+}
+
+vim.winfixbuf = false
+
 -- vim: ts=2 sts=2 sw=2 et
