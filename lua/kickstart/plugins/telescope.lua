@@ -56,13 +56,45 @@ return {
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
-        --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
-        -- pickers = {}
+        defaults = {
+          layout_strategy = 'horizontal',
+          layout_config = {
+            width = 0.95,
+            height = 0.85,
+            preview_width = 0.35, -- Results column gets ~65%
+          },
+          path_display = { 'shorten' }, -- Show shortened paths for readability
+          mappings = {
+            i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          },
+        },
+        pickers = {
+          -- Pickers that show file paths get extra width and smaller preview
+          live_grep = {
+            layout_config = { width = 0.98, preview_width = 0.30 },
+            path_display = { 'absolute' },
+          },
+          find_files = {
+            layout_config = { width = 0.98, preview_width = 0.30 },
+            path_display = { 'absolute' },
+          },
+          grep_string = {
+            layout_config = { width = 0.98, preview_width = 0.30 },
+            path_display = { 'absolute' },
+          },
+          lsp_references = {
+            layout_config = { width = 0.98, preview_width = 0.30 },
+            path_display = { 'absolute' },
+          },
+          quickfix = {
+            layout_config = { width = 0.98, preview_width = 0.30 },
+            path_display = { 'absolute' },
+          },
+          diagnostics = {
+            layout_config = { width = 0.98, preview_width = 0.30 },
+            path_display = { 'absolute' },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
