@@ -226,18 +226,39 @@ return {
         --     plugins = {
         --       {
         --         -- Volar setup (vue 3.0.0)
-        --         name = "@vue/typescript-plugin",
-        --         location = "/Users/pawelzapasnik/.nvm/versions/node/v20.9.0/lib/node_modules/@vue/typescript-plugin",
-        --         languages = { "javascript", "typescript", "vue" },
+        --         name = '@vue/typescript-plugin',
+        --         location = '/Users/pawelzapasnik/.nvm/versions/node/v20.9.0/lib/node_modules/@vue/typescript-plugin',
+        --         languages = { 'javascript', 'typescript', 'vue' },
         --       },
         --     },
         --   },
         --   filetypes = {
-        --     "javascript",
-        --     "typescript",
-        --     "vue",
+        --     'javascript',
+        --     'typescript',
+        --     'vue',
         --   },
         -- },
+        --
+
+        vtsls = {
+          filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+          settings = {
+            vtsls = { tsserver = { globalPlugins = {} } },
+          },
+          before_init = function(params, config)
+            local result = vim.system({ 'npm', 'query', '#vue' }, { cwd = params.workspaceFolders[1].name, text = true }):wait()
+            if result.stdout ~= '[]' then
+              local vuePluginConfig = {
+                name = '@vue/typescript-plugin',
+                location = require('mason-registry').get_package('vue-language-server'):get_install_path() .. '/node_modules/@vue/language-server',
+                languages = { 'vue' },
+                configNamespace = 'typescript',
+                enableForWorkspaceTypeScriptVersions = true,
+              }
+              table.insert(config.settings.vtsls.tsserver.globalPlugins, vuePluginConfig)
+            end
+          end,
+        },
 
         eslint = {
           filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx', 'vue', 'svelte', 'astro' },
@@ -253,7 +274,7 @@ return {
         volar = {},
 
         -- Vue 2
-        vuels = {},
+        -- vuels = {},
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
