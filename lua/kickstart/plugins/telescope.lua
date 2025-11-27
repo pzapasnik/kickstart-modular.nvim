@@ -53,6 +53,12 @@ return {
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      -- Pickers that show file paths get extra width and smaller preview
+      local file_path_picker_config = {
+        layout_config = { width = 0.98, preview_width = 0.30 },
+        path_display = { 'absolute' },
+      }
+
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -69,31 +75,12 @@ return {
           },
         },
         pickers = {
-          -- Pickers that show file paths get extra width and smaller preview
-          live_grep = {
-            layout_config = { width = 0.98, preview_width = 0.30 },
-            path_display = { 'absolute' },
-          },
-          find_files = {
-            layout_config = { width = 0.98, preview_width = 0.30 },
-            path_display = { 'absolute' },
-          },
-          grep_string = {
-            layout_config = { width = 0.98, preview_width = 0.30 },
-            path_display = { 'absolute' },
-          },
-          lsp_references = {
-            layout_config = { width = 0.98, preview_width = 0.30 },
-            path_display = { 'absolute' },
-          },
-          quickfix = {
-            layout_config = { width = 0.98, preview_width = 0.30 },
-            path_display = { 'absolute' },
-          },
-          diagnostics = {
-            layout_config = { width = 0.98, preview_width = 0.30 },
-            path_display = { 'absolute' },
-          },
+          live_grep = file_path_picker_config,
+          find_files = file_path_picker_config,
+          grep_string = file_path_picker_config,
+          lsp_references = file_path_picker_config,
+          quickfix = file_path_picker_config,
+          diagnostics = file_path_picker_config,
         },
         extensions = {
           ['ui-select'] = {
