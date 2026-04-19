@@ -10,7 +10,7 @@ return {
     workspaces = {
       {
         name = 'personal',
-        path = '/Users/pawelzapasnik/Documents/Obsidian/Work',
+        path = '/Users/pawelzapasnik/Library/Mobile Documents/iCloud~md~obsidian/Documents/Work',
       },
     },
     notes_subdir = 'notes',

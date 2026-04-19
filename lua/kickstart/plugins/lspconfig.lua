@@ -211,7 +211,18 @@ return {
         },
 
         -- Elixir
+
         elixirls = {},
+
+        -- // not working with lazzy jet :(
+        -- expert = {
+        --   settings = {
+        --     workspaceSymbols = {
+        --       minQueryLength = 0,
+        --     },
+        --   },
+        --   filetypes = { 'elixir', 'eelixir', 'heex' },
+        -- },
 
         -- Frontend
 
@@ -262,12 +273,12 @@ return {
 
         eslint = {
           filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx', 'vue', 'svelte', 'astro' },
-          on_attach = function(client, bufnr)
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              buffer = bufnr,
-              command = 'EslintFixAll',
-            })
-          end,
+          -- on_attach = function(client, bufnr)
+          --   vim.api.nvim_create_autocmd('BufWritePre', {
+          --     buffer = bufnr,
+          --     command = 'EslintFixAll',
+          --   })
+          -- end,
         },
 
         -- Vue
