@@ -64,7 +64,7 @@ vim.keymap.set('n', 'N', 'Nzzzv', { desc = '#vim Repeat search backward and cent
 vim.keymap.set('x', '<leader>p', [["_dP]], { desc = '#vim  Put yanked text before cursor in visual mode' })
 
 -- yank filepath
-vim.keymap.set('n', '<leader>yp', ':let @" = expand("%")<CR>', { desc = '#vim #yank put current file path to clipboard' })
+vim.keymap.set('n', '<leader>yp', ':let @+ = expand("%")<CR>', { desc = '#vim #yank put current file path to clipboard' })
 
 -- Clear Delete without yanking
 vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = '#vim Delete selected text or current line without yanking it' })
