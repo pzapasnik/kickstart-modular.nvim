@@ -139,4 +139,98 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Delete entries from the quickfix / location list with `dd` (and `d` in visual mode)
+local function qf_delete(start_line, end_line)
+  local win = vim.api.nvim_get_current_win()
+  local is_loc = vim.fn.getwininfo(win)[1].loclist == 1
+
+  local what = { items = 0, title = 0, id = 0 }
+  local list = is_loc and vim.fn.getloclist(win, what) or vim.fn.getqflist(what)
+  local items = list.items
+
+  if #items == 0 then
+    return
+  end
+
+  start_line = math.max(start_line, 1)
+  end_line = math.min(end_line, #items)
+
+  for i = end_line, start_line, -1 do
+    table.remove(items, i)
+  end
+
+  local set = function(action, what_)
+    if is_loc then
+      vim.fn.setloclist(win, {}, action, what_)
+    else
+      vim.fn.setqflist({}, action, what_)
+    end
+  end
+
+  -- action ' ' pushes a NEW list onto the quickfix stack, so `:colder` undoes the deletion
+  set(' ', { title = list.title })
+
+  -- `quickfixtextfunc` is a funcref, and funcrefs reach Lua as `vim.NIL`, so a custom
+  -- formatter has to be carried over from the old list (found by id) in Vimscript.
+  -- It must be in place before the items land, or the window renders with the default format.
+  local getter = is_loc and string.format('getloclist(%d, ', win) or 'getqflist('
+  local setter = is_loc and string.format('setloclist(%d, ', win) or 'setqflist('
+  vim.cmd(string.format(
+    [[
+      let g:QfDeleteTextfunc = %s{'id': %d, 'quickfixtextfunc': 0}).quickfixtextfunc
+      if !empty(g:QfDeleteTextfunc)
+        call %s[], 'r', {'quickfixtextfunc': g:QfDeleteTextfunc})
+      endif
+      unlet g:QfDeleteTextfunc
+    ]],
+    getter,
+    list.id,
+    setter
+  ))
+
+  set('r', { items = items })
+
+  -- keep the cursor where the deleted entry was
+  if #items > 0 then
+    pcall(vim.api.nvim_win_set_cursor, win, { math.min(start_line, #items), 0 })
+  end
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'qf',
+  desc = 'Quickfix list editing keymaps',
+  group = vim.api.nvim_create_augroup('kickstart-quickfix', { clear = true }),
+  callback = function(event)
+    local opts = { buffer = event.buf, silent = true }
+
+    vim.keymap.set('n', 'dd', function()
+      local line = vim.fn.line '.'
+      qf_delete(line, line + vim.v.count1 - 1)
+    end, vim.tbl_extend('force', opts, { desc = '#quickfix Delete entry (accepts a count)' }))
+
+    vim.keymap.set('x', 'd', function()
+      local first = vim.fn.line 'v'
+      local last = vim.fn.line '.'
+      vim.cmd 'normal! \27' -- leave visual mode
+      qf_delete(math.min(first, last), math.max(first, last))
+    end, vim.tbl_extend('force', opts, { desc = '#quickfix Delete selected entries' }))
+
+    local is_loc = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1].loclist == 1
+
+    vim.keymap.set('n', 'u', function()
+      local ok = pcall(vim.cmd, is_loc and 'lolder' or 'colder')
+      if not ok then
+        vim.notify('Quickfix: nothing to undo', vim.log.levels.WARN)
+      end
+    end, vim.tbl_extend('force', opts, { desc = '#quickfix Undo (older list)' }))
+
+    vim.keymap.set('n', '<C-r>', function()
+      local ok = pcall(vim.cmd, is_loc and 'lnewer' or 'cnewer')
+      if not ok then
+        vim.notify('Quickfix: nothing to redo', vim.log.levels.WARN)
+      end
+    end, vim.tbl_extend('force', opts, { desc = '#quickfix Redo (newer list)' }))
+  end,
+})
+
 -- vim: ts=2 sts=2 sw=2 et
