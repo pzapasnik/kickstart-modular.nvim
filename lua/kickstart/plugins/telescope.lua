@@ -53,16 +53,35 @@ return {
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      -- Pickers that show file paths get extra width and smaller preview
+      local file_path_picker_config = {
+        layout_config = { width = 0.99, preview_width = 0.25 },
+        path_display = { 'truncate' },
+      }
+
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
-        --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
-        -- pickers = {}
+        defaults = {
+          layout_strategy = 'horizontal',
+          layout_config = {
+            width = 0.95,
+            height = 0.85,
+            preview_width = 0.30, -- Results column gets ~70%
+          },
+          path_display = { 'truncate' }, -- Truncate long paths from the left
+          mappings = {
+            i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          },
+        },
+        pickers = {
+          live_grep = file_path_picker_config,
+          find_files = file_path_picker_config,
+          grep_string = file_path_picker_config,
+          lsp_references = file_path_picker_config,
+          quickfix = file_path_picker_config,
+          diagnostics = file_path_picker_config,
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
